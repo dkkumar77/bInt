@@ -1,4 +1,6 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class BigInt implements BigIntInterface  {
@@ -10,30 +12,15 @@ public class BigInt implements BigIntInterface  {
      * multiply
      * divide
 
-
-     /MISC
-     * length
-     * setIntoArrayList
-     * BigIntToString
-     * absoluteVal
-     * greaterThan
-     * sqrtRoot
-     * logicalShiftLeft
-     * logicalShiftRight
-     * power
-     * negate
-     * max
-     * min
-     * modulus
-     * probablePrime
      */
+
+    private boolean negative = false;
 
     private String BigIntString;
 
     private int lengthBigInt;
 
     private ArrayList<Integer> list = new ArrayList<>();
-
 
 
     public BigInt(String num) {
@@ -43,16 +30,38 @@ public class BigInt implements BigIntInterface  {
             this.lengthBigInt = num.length();
             storeContents(num);
 
-        }
-        else{
-            System.out.println("BigInt Invalid");
+        } else {
+            System.out.println("Invalid Input");
 
         }
+
+
+        System.out.println(length());
+    }
+
+
+    public BigInt(){
+        Random r = new Random();
+        int arbitraryLength = r.nextInt(350);
+        String arbitraryBigInt = "";
+        for(int i = 0; i<arbitraryLength; i++){
+            arbitraryBigInt = arbitraryBigInt + r.nextInt(10);
+        }
+
+        this.BigIntString = arbitraryBigInt;
+        this.lengthBigInt = arbitraryLength+1;
+        storeContents(BigIntString);
+    }
+
+
+    private int length(){
+        return list.size();
 
     }
 
     private boolean stringValidity(String num){
-        if(!(num.contains("[a-zA-Z]+"))){
+        String regex = "[0-9]+";
+        if((num.matches(regex))){
             return true;
 
         }
@@ -61,17 +70,13 @@ public class BigInt implements BigIntInterface  {
 
     private void storeContents(String string){
         for(int i = 0; i < lengthBigInt; i++){
-
             list.add(Integer.parseInt(Character.toString(string.charAt(i))));
-
-
 
         }
 
 
 
     }
-
 
     public String toString(){
 
@@ -82,16 +87,69 @@ public class BigInt implements BigIntInterface  {
         return null;
     }
 
+
+    private ArrayList<Integer> store(String s){
+        ArrayList<Integer> temporaryContainer = new ArrayList<>();
+
+        for(int i = 0; i< s.length(); i++){
+            temporaryContainer.add(Integer.parseInt(Character.toString(toString().charAt(i))));
+        }
+        return temporaryContainer;
+
+    }
     @Override
     public void add(String s1, String s2) {
+        ArrayList<Integer> container1 = store(s1);
+        ArrayList<Integer> container2 = store(s2);
+        if(!(lengthEquality(s1.length(),s2.length()))){
+            if(lengthEquality(s1.length(),s2.length()) == true){
+                additiveAlgorithm(container2,container1);
+            }
+            else{
+                additiveAlgorithm(container1, container2);
+            }
+        }
+        else{
+                additiveAlgorithm(container1, container2);
+        }
 
     }
 
+    public String additiveAlgorithm(ArrayList<Integer> topAddend, ArrayList<Integer> bottomAddend){
+
+
+        return "temp return";
+
+
+    }
+
+
+    private boolean lengthEquality(int h, int k){
+        if(h == k){
+            return true;
+        }
+        else return false;
+
+    }
+
+    private boolean lengthInequality(int h, int k){
+        if(h<k){
+            return true;
+        }
+        else{
+            return false;
+
+        }
+    }
     @Override
     public void subtract(String s1, String s2) {
 
     }
 
 
+    public static void main(String[] args) {
+        BigInt e = new BigInt("1234567");
+        e.add("12345","12345");
+    }
 
 }
