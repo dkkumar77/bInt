@@ -118,7 +118,7 @@ public class BigInt implements BigIntInterface  {
     public String additiveAlgorithm(ArrayList<Integer> topAddend, ArrayList<Integer> bottomAddend){
 
 
-        return "temp return";
+        return "temp return ";
 
 
     }
