@@ -40,6 +40,10 @@ public class BigInt implements BigIntInterface  {
 
         System.out.println(length());
     }
+    public BigInt(int temp){
+
+
+    }
 
 
     public BigInt(){
@@ -91,7 +95,7 @@ public class BigInt implements BigIntInterface  {
 
 
     private ArrayList<Integer> store(String s){
-        ArrayList<Integer> temporaryContainer = new ArrayList<>();
+        ArrayList<Integer> temporaryContainer = new ArrayList<>(s.length());
 
         for(int i = 0; i< s.length(); i++){
             temporaryContainer.add(Integer.parseInt(Character.toString(toString().charAt(i))));
@@ -127,6 +131,35 @@ public class BigInt implements BigIntInterface  {
 
         return "hi";
 
+    }
+
+    public String addAlgo(String one, String two){
+
+        ArrayList<Integer> s1 = reverseList(store(one));
+        ArrayList<Integer> s2 = reverseList(store(two));
+
+        boolean handleOneUp = false;
+        final int CARRY = 1;
+
+        ArrayList<Integer> solution = new ArrayList<Integer>();
+
+        if(s1.size() > s2.size()){
+
+            for(int i = 0; i< s1.size(); i++){
+                if((s1.get(i)+s2.get(i) != 10)){
+                    solution.add(s1.get(i)+s2.get(i));
+                }
+
+            }
+
+
+
+
+        }
+
+
+
+        return solution.toString();
     }
 
     private ArrayList<Integer> reverseList(ArrayList<Integer> rList){
@@ -167,8 +200,10 @@ public class BigInt implements BigIntInterface  {
 
 
     public static void main(String[] args) {
-        BigInt e = new BigInt("123");
-        e.add("12345","12345");
+        BigInt e = new BigInt(2);
+        System.out.println(e.addAlgo("1234","1234"));
+
+
     }
 
 }
