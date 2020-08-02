@@ -22,6 +22,8 @@ public class BigInt implements BigIntInterface  {
 
     private ArrayList<Integer> list = new ArrayList<>();
 
+    private static final int ADDCAP = 10;
+
 
     public BigInt(String num) {
 
@@ -116,9 +118,26 @@ public class BigInt implements BigIntInterface  {
     }
 
     public String additiveAlgorithm(ArrayList<Integer> topAddend, ArrayList<Integer> bottomAddend){
+        topAddend = reverseList(topAddend);
+        bottomAddend = reverseList(bottomAddend);
+
+        System.out.println(topAddend.toString());
+        System.out.println(bottomAddend.toString());
 
 
-        return "temp return ";
+        return "hi";
+
+    }
+
+    private ArrayList<Integer> reverseList(ArrayList<Integer> rList){
+        ArrayList<Integer> temporaryContainer = new ArrayList<>(rList.size());
+        for(int i = rList.size(); i  > 0; i--){
+            temporaryContainer.add(rList.get(i));
+
+
+        }
+
+        return temporaryContainer;
 
 
     }
@@ -148,7 +167,7 @@ public class BigInt implements BigIntInterface  {
 
 
     public static void main(String[] args) {
-        BigInt e = new BigInt("1234567");
+        BigInt e = new BigInt("123");
         e.add("12345","12345");
     }
 
