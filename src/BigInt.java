@@ -203,22 +203,52 @@ public class BigInt implements BigIntInterface  {
 
         ArrayList<Integer> s1 = reverseList(store(one));
         ArrayList<Integer> s2 = reverseList(store(two));
+        ArrayList<Integer> solution = new ArrayList<Integer>();
+
+
+
+
+
 
         boolean handleOneUp = false;
         final int CARRY = 1;
 
-        ArrayList<Integer> solution = new ArrayList<Integer>();
+
+
+
+
 
         if(s1.size() > s2.size() || s1.size() == s2.size()){
 
             for(int i = 0; i< s1.size(); i++){
-                if((s1.get(i)+s2.get(i) != 10)){
-                    solution.add(s1.get(i)+s2.get(i));
+                if((s1.get(i)+s2.get(i) < ADDCAP)){
+                    if(handleOneUp == false) {
+                        solution.add(s1.get(i) + s2.get(i));
+                    }
+                    else{
+                        solution.add(s1.get(i) + s2.get(i) + CARRY);
+                        handleOneUp = false;
+                    }
+                }
+                else{
+                    if(handleOneUp == true){
+                        solution.add(s1.get(i) + s2.get(i) - ADDCAP + 1);
+                    }
+                    else {
+                        solution.add(s1.get(i) + s2.get(i) - ADDCAP);
+                    }
+
+
+                    handleOneUp =(true);
+
                 }
 
             }
 
         }
+
+
+
 
         return reverseList(solution).toString();
     }
@@ -262,7 +292,7 @@ public class BigInt implements BigIntInterface  {
 
     public static void main(String[] args) {
         BigInt e = new BigInt(2);
-        System.out.println(e.addAlgo("1234","1234"));
+        System.out.println(e.addAlgo("23432123","23534222"));
 
 
     }
