@@ -23,6 +23,7 @@ public class BigInt implements BigIntInterface  {
     private ArrayList<Integer> list = new ArrayList<>();
 
     private static final int ADDCAP = 10;
+    private static final int ADDCARRY = 1;
 
 
         /*
@@ -152,7 +153,26 @@ public class BigInt implements BigIntInterface  {
         return null;
     }
 
+    public void toString(ArrayList<Integer> number){
 
+        for(int i = 0; i < number.size();i++){
+            System.out.print(number.get(i));
+        }
+
+    }
+
+
+    public String toModifiedString(ArrayList<Integer> list){
+        String s = "";
+
+        for(int i = 0; i< list.size();i++){
+            s = s + list.get(i);
+
+
+        }
+        return s;
+
+    }
     /*
 
      */
@@ -199,59 +219,77 @@ public class BigInt implements BigIntInterface  {
 
     }
 
-    public String addAlgo(String one, String two){
-
-        ArrayList<Integer> s1 = reverseList(store(one));
-        ArrayList<Integer> s2 = reverseList(store(two));
-        ArrayList<Integer> solution = new ArrayList<Integer>();
-
-
-
-
-
-
+    public void addAlgo(String one, String two){
+        ArrayList<Integer> intList1 = reverseList(store(one));
+        ArrayList<Integer> intList2 = reverseList(store(two));
         boolean handleOneUp = false;
-        final int CARRY = 1;
+        ArrayList<Integer> solution = new ArrayList<>();
+
+
+        if(intList1.size() == intList2.size()){
 
 
 
-
-
-
-        if(s1.size() > s2.size() || s1.size() == s2.size()){
-
-            for(int i = 0; i< s1.size(); i++){
-                if((s1.get(i)+s2.get(i) < ADDCAP)){
+            for(int i = 0; i< intList1.size(); i++){
+                if((intList1.get(i)+intList2.get(i) < ADDCAP)){
                     if(handleOneUp == false) {
-                        solution.add(s1.get(i) + s2.get(i));
+                        solution.add(intList1.get(i) + intList2.get(i));
                     }
                     else{
-                        solution.add(s1.get(i) + s2.get(i) + CARRY);
-                        handleOneUp = false;
+
+                        if(intList1.get(i) + intList2.get(i) == 9 && (handleOneUp == true)){
+                            solution.add(0);
+                            handleOneUp = true;
+                        }
+                        else {
+                            solution.add(intList1.get(i) + intList2.get(i) + ADDCARRY);
+                            handleOneUp = false;
+                        }
+
                     }
                 }
                 else{
                     if(handleOneUp == true){
-                        solution.add(s1.get(i) + s2.get(i) - ADDCAP + 1);
+                        solution.add(intList1.get(i) + intList2.get(i) - ADDCAP + 1);
                     }
                     else {
-                        solution.add(s1.get(i) + s2.get(i) - ADDCAP);
+                        solution.add(intList1.get(i) + intList2.get(i) - ADDCAP);
                     }
-
-
                     handleOneUp =(true);
 
                 }
 
             }
 
+
+        }
+        else if(intList1.size() > intList2.size()){
+            additiveLengthSeperation(store(one), store(two));
+
+        }
+        else{
+            additiveLengthSeperation(store(two), store(one));
+
         }
 
 
 
+        toString(reverseList(solution));
 
-        return reverseList(solution).toString();
     }
+
+    public void additiveLengthSeperation(ArrayList<Integer> larger, ArrayList<Integer> smaller){
+
+
+        for(int i= smaller.size(); i<larger.size(); i++){
+            smaller.add(0,0);
+        }
+        addAlgo(toModifiedString(larger),toModifiedString(smaller));
+
+    }
+
+
+
 
     private ArrayList<Integer> reverseList(ArrayList<Integer> rList){
         int tempSize = rList.size();
@@ -292,7 +330,7 @@ public class BigInt implements BigIntInterface  {
 
     public static void main(String[] args) {
         BigInt e = new BigInt(2);
-        System.out.println(e.addAlgo("23432123","23534222"));
+        e.addAlgo("12345674123","123456");
 
 
     }
