@@ -25,27 +25,57 @@ public class BigInt implements BigIntInterface  {
     private static final int ADDCAP = 10;
 
 
+        /*
+            Creates an object 'BigInt' when passing in a String.
+            The string is first passed into a Validator method
+            that confirms that the String that is inputted
+            only contains Integer values. Once the boolean value of
+            that method returns back true, the storeContents method is
+            then called in which. Each character of the array is stored
+            into "list" which was the ArrayList of Integers.
+         */
     public BigInt(String num) {
 
         if (stringValidity(num) == true) {
+            /*
+            Sets the string parameter equal to the String
+            value of BigIntString while also setting the length
+            of the String, to the lengthBigInt, which lets us
+            keep track of the length of the local Big Int value.
+             */
             this.BigIntString = num;
             this.lengthBigInt = num.length();
             storeContents(num);
 
         } else {
+            /*
+                Else Branch will return invalid input
+                if value Big Int contains anything other than
+                numbers 0-9
+             */
             System.out.println("Invalid Input");
 
         }
 
 
-        System.out.println(length());
+        // System.out.println(length());
     }
+    /*
+    This constructor will do something. I dont know what yet.
+     */
     public BigInt(int temp){
 
 
     }
 
+        /* Creates a random BigInt value of a size that ranges from 0-350.
+           Using the random iterator it will produce random number values 1-9
+           continuously until it reaches the randomly generated size.
+           Soon after, if this constructor is called for. The values of BigIntString
+           and lengthBigInt will be set to the physical value itself, and the size
+           of the number, respectively.
 
+         */
     public BigInt(){
         Random r = new Random();
         int arbitraryLength = r.nextInt(350);
@@ -59,11 +89,36 @@ public class BigInt implements BigIntInterface  {
         storeContents(BigIntString);
     }
 
-
-    private int length(){
+    /*
+        Prints out the size of the local "list value".
+     */
+    public int length(){
         return list.size();
 
     }
+
+    /*
+        First checks that the String is indeed valid to
+        be a Big Int, then it returns the size;
+        If Invalid, it will return 0;
+     */
+    public int length(String s){
+        if(stringValidity(s) == true){
+            return s.length();
+        }
+        else{
+            return 0;
+        }
+    }
+
+
+    /*
+        stringValidity takes in a String 'num',
+        and returns true if every single character
+        with in the String matches ASCII values of
+        0-9. If number contains anything other, then
+        it will return false.
+     */
 
     private boolean stringValidity(String num){
         String regex = "[0-9]+";
@@ -84,6 +139,10 @@ public class BigInt implements BigIntInterface  {
 
     }
 
+    /*
+        toString() returns the list
+     */
+
     public String toString(){
 
         for (int set = 0; set < list.size(); set++){
@@ -94,11 +153,18 @@ public class BigInt implements BigIntInterface  {
     }
 
 
+    /*
+
+     */
     private ArrayList<Integer> store(String s){
+
+        int length = s.length();
         ArrayList<Integer> temporaryContainer = new ArrayList<>(s.length());
 
         for(int i = 0; i< s.length(); i++){
-            temporaryContainer.add(Integer.parseInt(Character.toString(toString().charAt(i))));
+            temporaryContainer.add(Integer.parseInt(String.valueOf(s.charAt(i))));
+
+
         }
         return temporaryContainer;
 
@@ -143,7 +209,7 @@ public class BigInt implements BigIntInterface  {
 
         ArrayList<Integer> solution = new ArrayList<Integer>();
 
-        if(s1.size() > s2.size()){
+        if(s1.size() > s2.size() || s1.size() == s2.size()){
 
             for(int i = 0; i< s1.size(); i++){
                 if((s1.get(i)+s2.get(i) != 10)){
@@ -152,21 +218,16 @@ public class BigInt implements BigIntInterface  {
 
             }
 
-
-
-
         }
 
-
-
-        return solution.toString();
+        return reverseList(solution).toString();
     }
 
     private ArrayList<Integer> reverseList(ArrayList<Integer> rList){
-        ArrayList<Integer> temporaryContainer = new ArrayList<>(rList.size());
-        for(int i = rList.size(); i  > 0; i--){
+        int tempSize = rList.size();
+        ArrayList<Integer> temporaryContainer = new ArrayList<>(tempSize);
+        for(int i = rList.size()-1; i > -1; i--){
             temporaryContainer.add(rList.get(i));
-
 
         }
 
