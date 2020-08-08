@@ -26,6 +26,10 @@ public class BigInt implements BigIntInterface  {
 
     private static final int SUBBORROW = 10;
 
+    private boolean negate = false;
+
+
+
 
 
         /*
@@ -158,8 +162,10 @@ public class BigInt implements BigIntInterface  {
        toString(ArrayList<Integer> e) takes in an Integer array, and displays it
        This method has no return type, rather it should be used to view the String.
      */
-    public void toString(ArrayList<Integer> number){
-
+    public void toString(ArrayList<Integer> number, boolean negate){
+        if(negate == true){
+            System.out.print("-");
+        }
         for(int i = 0; i < number.size();i++){
             System.out.print(number.get(i));
         }
@@ -243,7 +249,7 @@ public class BigInt implements BigIntInterface  {
             additiveLengthSeperation(store(two), store(one));
 
         }
-        toString(reverseList(solution));
+            toString(reverseList(solution), false);
 
     }
 
@@ -282,7 +288,7 @@ public class BigInt implements BigIntInterface  {
     }
 
     private boolean lengthInequality(int h, int k){
-        if(h<k){
+        if(h>k){
             return true;
         }
         else{
@@ -293,25 +299,25 @@ public class BigInt implements BigIntInterface  {
     @Override
     public void subtract(String s1, String s2) {
         if(stringValidity(s1) && stringValidity(s2)){
+            ArrayList<Integer> e = reverseList(store(s1));
+            ArrayList<Integer> e2 = reverseList(store(s2));
+            ArrayList<Integer> temp = new ArrayList<>();
+
             if(lengthEquality(s1.length(), s2.length())){
                 // if s1 and s2 are equal in length;
                 // MODEL   --- >   5 4 5 3
                 // MODEL   --- >   1 1 1 1
                 int forSize;
-
                 boolean borrow = false;
 
 
                 if (s1.length() < s2.length() || s1.length() == s2.length()) {
                     forSize = s2.length();
-
                 }
                 else{
                     forSize = s1.length();
                 }
-                ArrayList<Integer> e = reverseList(store(s1));
-                ArrayList<Integer> e2 = reverseList(store(s2));
-                ArrayList<Integer> temp = new ArrayList<>();
+
 
                 for(int i = 0; i< forSize; i++){
 
@@ -329,16 +335,29 @@ public class BigInt implements BigIntInterface  {
                     else{
                         temp.add(e.get(i) - e2.get(i) - 1);
                         borrow = false;
-
                     }
+                }
+                if(!negate == true) {
+                    toString(reverseList(temp), false);
+                }
+                else{
+                    toString(reverseList(temp), true);
 
                 }
-                toString(reverseList(temp));
-
             }
             else{
-                if(lengthEquality(s1.length(), s2.length())){
+                if(lengthInequality(s1.length(), s2.length()) == true){
 
+                        // A - B where A is greater in length, solution will always be positive.
+                        for(int var = s2.length(); var < s1.length(); var++){
+                            e2.add(0);
+                        }
+
+                        subtract(toStringReturn(reverseList(e)), toStringReturn(reverseList(e2)));
+                    }
+                else{
+                    negate = true;
+                    subtract(toStringReturn(reverseList(e2)), toStringReturn(reverseList(e)));
 
                 }
             }
@@ -355,7 +374,7 @@ public class BigInt implements BigIntInterface  {
 
     public static void main(String[] args) {
         BigInt e = new BigInt();
-        e.subtract("11", "99");
+        e.subtract("11", "123411");
 
 
     }
