@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,6 +23,9 @@ public class BigInt implements BigIntInterface  {
 
     private static final int ADDCAP = 10;
     private static final int ADDCARRY = 1;
+
+    private static final int SUBBORROW = 10;
+
 
 
         /*
@@ -64,9 +66,17 @@ public class BigInt implements BigIntInterface  {
     /*
     This constructor will do something. I dont know what yet.
      */
-    public BigInt(int temp){
+    public BigInt(int rand){
+        Random r = new Random();
+        int arbitraryLength = r.nextInt(350);
+        String arbitraryBigInt = "";
+        for(int i = 0; i<arbitraryLength; i++){
+            arbitraryBigInt = arbitraryBigInt + r.nextInt(10);
+        }
 
-
+        this.BigIntString = arbitraryBigInt;
+        this.lengthBigInt = arbitraryLength+1;
+        storeContents(BigIntString);
     }
 
         /* Creates a random BigInt value of a size that ranges from 0-350.
@@ -78,16 +88,6 @@ public class BigInt implements BigIntInterface  {
 
          */
     public BigInt(){
-        Random r = new Random();
-        int arbitraryLength = r.nextInt(350);
-        String arbitraryBigInt = "";
-        for(int i = 0; i<arbitraryLength; i++){
-            arbitraryBigInt = arbitraryBigInt + r.nextInt(10);
-        }
-
-        this.BigIntString = arbitraryBigInt;
-        this.lengthBigInt = arbitraryLength+1;
-        storeContents(BigIntString);
     }
 
     /*
@@ -105,6 +105,7 @@ public class BigInt implements BigIntInterface  {
      */
     public int length(String s){
         if(stringValidity(s) == true){
+            //if the Big Integer only contains numbers, it will return the length.
             return s.length();
         }
         else{
@@ -153,6 +154,10 @@ public class BigInt implements BigIntInterface  {
         return null;
     }
 
+    /*
+       toString(ArrayList<Integer> e) takes in an Integer array, and displays it
+       This method has no return type, rather it should be used to view the String.
+     */
     public void toString(ArrayList<Integer> number){
 
         for(int i = 0; i < number.size();i++){
@@ -162,7 +167,10 @@ public class BigInt implements BigIntInterface  {
     }
 
 
-    public String toModifiedString(ArrayList<Integer> list){
+    /*
+     toModi
+     */
+    public String toStringReturn(ArrayList<Integer> list){
         String s = "";
 
         for(int i = 0; i< list.size();i++){
@@ -173,9 +181,8 @@ public class BigInt implements BigIntInterface  {
         return s;
 
     }
-    /*
 
-     */
+
     private ArrayList<Integer> store(String s){
 
         int length = s.length();
@@ -189,46 +196,15 @@ public class BigInt implements BigIntInterface  {
         return temporaryContainer;
 
     }
-    @Override
-    public void add(String s1, String s2) {
-        ArrayList<Integer> container1 = store(s1);
-        ArrayList<Integer> container2 = store(s2);
-        if(!(lengthEquality(s1.length(),s2.length()))){
-            if(lengthEquality(s1.length(),s2.length()) == true){
-                additiveAlgorithm(container2,container1);
-            }
-            else{
-                additiveAlgorithm(container1, container2);
-            }
-        }
-        else{
-                additiveAlgorithm(container1, container2);
-        }
-
-    }
-
-    public String additiveAlgorithm(ArrayList<Integer> topAddend, ArrayList<Integer> bottomAddend){
-        topAddend = reverseList(topAddend);
-        bottomAddend = reverseList(bottomAddend);
-
-        System.out.println(topAddend.toString());
-        System.out.println(bottomAddend.toString());
 
 
-        return "hi";
 
-    }
-
-    public void addAlgo(String one, String two){
+    public void add(String one, String two){
         ArrayList<Integer> intList1 = reverseList(store(one));
         ArrayList<Integer> intList2 = reverseList(store(two));
         boolean handleOneUp = false;
         ArrayList<Integer> solution = new ArrayList<>();
-
-
         if(intList1.size() == intList2.size()){
-
-
 
             for(int i = 0; i< intList1.size(); i++){
                 if((intList1.get(i)+intList2.get(i) < ADDCAP)){
@@ -245,7 +221,6 @@ public class BigInt implements BigIntInterface  {
                             solution.add(intList1.get(i) + intList2.get(i) + ADDCARRY);
                             handleOneUp = false;
                         }
-
                     }
                 }
                 else{
@@ -258,10 +233,7 @@ public class BigInt implements BigIntInterface  {
                     handleOneUp =(true);
 
                 }
-
             }
-
-
         }
         else if(intList1.size() > intList2.size()){
             additiveLengthSeperation(store(one), store(two));
@@ -271,21 +243,17 @@ public class BigInt implements BigIntInterface  {
             additiveLengthSeperation(store(two), store(one));
 
         }
-
-
-
         toString(reverseList(solution));
 
     }
 
+
+
     public void additiveLengthSeperation(ArrayList<Integer> larger, ArrayList<Integer> smaller){
-
-
         for(int i= smaller.size(); i<larger.size(); i++){
             smaller.add(0,0);
         }
-        addAlgo(toModifiedString(larger),toModifiedString(smaller));
-
+        add(toStringReturn(larger), toStringReturn(smaller));
     }
 
 
@@ -324,13 +292,70 @@ public class BigInt implements BigIntInterface  {
     }
     @Override
     public void subtract(String s1, String s2) {
+        if(stringValidity(s1) && stringValidity(s2)){
+            if(lengthEquality(s1.length(), s2.length())){
+                // if s1 and s2 are equal in length;
+                // MODEL   --- >   5 4 5 3
+                // MODEL   --- >   1 1 1 1
+                int forSize;
+
+                boolean borrow = false;
+
+
+                if (s1.length() < s2.length() || s1.length() == s2.length()) {
+                    forSize = s2.length();
+
+                }
+                else{
+                    forSize = s1.length();
+                }
+                ArrayList<Integer> e = reverseList(store(s1));
+                ArrayList<Integer> e2 = reverseList(store(s2));
+                ArrayList<Integer> temp = new ArrayList<>();
+
+                for(int i = 0; i< forSize; i++){
+
+                    if(borrow == false) {
+                        if((e.get(i) - e2.get(i) >= 0)) {
+                            temp.add(e.get(i) - e2.get(i));
+                        }
+                        else{
+                            temp.add((e.get(i) + SUBBORROW) - e2.get(i));
+                            borrow = true;
+
+                            }
+                        }
+
+                    else{
+                        temp.add(e.get(i) - e2.get(i) - 1);
+                        borrow = false;
+
+                    }
+
+                }
+                toString(reverseList(temp));
+
+            }
+            else{
+                if(lengthEquality(s1.length(), s2.length())){
+
+
+                }
+            }
+        }
+
+    }
+
+    public void subtractAlgo(ArrayList<Integer> a, ArrayList<Integer> b){
+
+
 
     }
 
 
     public static void main(String[] args) {
-        BigInt e = new BigInt(2);
-        e.addAlgo("12345674123","123456");
+        BigInt e = new BigInt();
+        e.subtract("11", "99");
 
 
     }
