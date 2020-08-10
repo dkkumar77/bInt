@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
 
@@ -25,10 +26,10 @@ public class BigInt implements BigIntInterface {
     private static final int ADDCARRY = 1;
 
     private static final int SUBBORROW = 10;
-    private boolean negate = false;
     private boolean isBigIntNegative;
 
-    private boolean solutionCharged = false;
+    private boolean isSolutionCharged = false;
+
 
     /*
         Creates an object 'BigInt' when passing in a String.
@@ -39,12 +40,12 @@ public class BigInt implements BigIntInterface {
         then called in which. Each character of the array is stored
         into "list" which was the ArrayList of Integers.
      */
-    public BigInt(String num) {
-        if (num.charAt(0) == '-') {
-            num = num.substring(1);
+    public BigInt(String BigInteger) {
+        if (BigInteger.charAt(0) == '-') {
+            BigInteger = BigInteger.substring(1);
             isBigIntNegative = true;
         }
-        if (stringValidity(num) == true) {
+        if (validifyInput(BigInteger) == true) {
             /*
             Sets the string parameter equal to the String
             value of BigIntString while also setting the length
@@ -52,9 +53,9 @@ public class BigInt implements BigIntInterface {
             keep track of the length of the local Big Int value.
              */
 
-            this.BigIntString = num;
-            this.lengthBigInt = num.length();
-            storeContents(num);
+            this.BigIntString = BigInteger;
+            this.lengthBigInt = BigInteger.length();
+            storeBigInt(BigInteger);
 
         } else {
             /*
@@ -79,6 +80,19 @@ public class BigInt implements BigIntInterface {
     }
 
 
+    public BigInt(int rand){
+        Random r = new Random();
+        int arbitraryLength = r.nextInt(350);
+        String arbitraryBigInt = "";
+        for(int i = 0; i<arbitraryLength; i++){
+            arbitraryBigInt = arbitraryBigInt + r.nextInt(10);
+        }
+
+        this.BigIntString = arbitraryBigInt;
+        this.lengthBigInt = arbitraryLength+1;
+        store(BigIntString);
+    }
+
     private boolean lengthEquality(int h, int k) {
         if (h == k) {
             return true;
@@ -86,7 +100,7 @@ public class BigInt implements BigIntInterface {
 
     }
 
-    private boolean lengthInequality(int h, int k) {
+    private boolean unequalLengthSolver(int h, int k) {
         if (h > k) {
             return true;
         } else {
@@ -95,25 +109,14 @@ public class BigInt implements BigIntInterface {
         }
     }
 
-    public int length() {
-        return list.size();
-
-    }
-
     private int length(String s) {
-        if (stringValidity(s) == true) {
+        if (validifyInput(s) == true) {
             //if the Big Integer only contains numbers, it will return the length.
             return s.length();
         } else {
             return 0;
         }
     }
-
-
-
-
-
-
 
 
     /*
@@ -124,9 +127,9 @@ public class BigInt implements BigIntInterface {
         it will return false.
      */
 
-    private boolean stringValidity(String num) {
+    private boolean validifyInput(String BigInt) {
         String regex = "[0-9]+";
-        if ((num.matches(regex))) {
+        if ((BigInt.matches(regex))) {
             return true;
 
         }
@@ -134,18 +137,18 @@ public class BigInt implements BigIntInterface {
     }
 
 
-    private void storeContents(String string) {
+    private void storeBigInt(String BigInteger) {
         for (int i = 0; i < lengthBigInt; i++) {
-            list.add(Integer.parseInt(Character.toString(string.charAt(i))));
+            list.add(Integer.parseInt(Character.toString(BigInteger.charAt(i))));
 
         }
     }
 
-    private ArrayList<Integer> store(String s) {
-        int length = s.length();
-        ArrayList<Integer> temporaryContainer = new ArrayList<>(s.length());
-        for (int i = 0; i < s.length(); i++) {
-            temporaryContainer.add(Integer.parseInt(String.valueOf(s.charAt(i))));
+    private ArrayList<Integer> store(String BigInteger) {
+        int length = BigInteger.length();
+        ArrayList<Integer> temporaryContainer = new ArrayList<>(BigInteger.length());
+        for (int i = 0; i < BigInteger.length(); i++) {
+            temporaryContainer.add(Integer.parseInt(String.valueOf(BigInteger.charAt(i))));
         }
         return temporaryContainer;
     }
@@ -212,42 +215,10 @@ public class BigInt implements BigIntInterface {
     }
 
 
-    /*
-    @Override
-    public void subtract(String s1, String s2) {
-        boolean[] tester = handleNegative(s1, s2);
 
-
-        if (tester[0] == false && tester[1] == false) {
-            if (stringValidity(s1) & stringValidity(s2)) {
-                subtractAlgo(s1, s2);
-            }
-        } else if (tester[0] == true && tester[1] == true) {
-            if (negativeStringValidity(s1.substring(1)) && negativeStringValidity(s2.substring(1))) {
-                isBigIntNegative =true;
-                subtractAlgo(s2.substring(1), s1.substring(1));
-            }
-        } else if (tester[0] == false && tester[1] == true) {
-            if(negativeStringValidity(s2.substring(1)) && stringValidity(s1)){
-                addAlgo(s1, s2.substring(1));
-            }
-        }
-        else if(tester[0] == true && tester[1] == false){
-            if(negativeStringValidity(s1.substring(1)) && stringValidity(s2)){
-                isBigIntNegative = true;
-                addAlgo(s1.substring(1), s2);
-
-            }
-
-        }
-
-    }
-
-
-     */
     private boolean negativeStringValidity(String s1) {
 
-        if (stringValidity(s1)) {
+        if (validifyInput(s1)) {
             return true;
         } else {
             return false;
@@ -276,31 +247,32 @@ public class BigInt implements BigIntInterface {
     }
 
 
-    public void add(String one, String two) {
+    public void add(String BigIntegerOne, String BigIntegerTwo) {
 
 
-        boolean[] isNeg = handleNegative(one, two);
+        boolean[] isNeg = handleNegative(BigIntegerOne, BigIntegerTwo);
+
 
         if (isNeg[0] == false && isNeg[1] == false) {
-            if (stringValidity(one) & stringValidity(two)) {
-                addAlgo(one, two);
+            if (validifyInput(BigIntegerOne) & validifyInput(BigIntegerTwo)) {
+                addAlgo(BigIntegerOne, BigIntegerTwo);
             }
         } else if (isNeg[0] == true && isNeg[1] == true) {
             // -A + -B
-            if (negativeStringValidity(one.substring(1)) && negativeStringValidity(two.substring(1))) {
+            if (negativeStringValidity(BigIntegerOne.substring(1)) && negativeStringValidity(BigIntegerTwo.substring(1))) {
                 isBigIntNegative = true;
-                add(one.substring(1), two.substring(1));
+                add(BigIntegerOne.substring(1), BigIntegerTwo.substring(1));
 
             }
         } else if (isNeg[0] == false && isNeg[1] == true) {
             //A + -B
-            if (negativeStringValidity(two.substring(1)) && stringValidity(one)) {
-                subtractAlgo(store(one), store(two.substring(1)));
+            if (negativeStringValidity(BigIntegerTwo.substring(1)) && validifyInput(BigIntegerOne)) {
+                subtractAlgo(store(BigIntegerOne), store(BigIntegerTwo.substring(1)));
             }
         } else if (isNeg[0] == true && isNeg[1] == false) {
             // -A + B
-            if (negativeStringValidity(one.substring(1)) && stringValidity(two)) {
-                subtract(one.substring(1), two);
+            if (negativeStringValidity(BigIntegerOne.substring(1)) && validifyInput(BigIntegerTwo)) {
+                subtract(BigIntegerOne.substring(1), BigIntegerTwo);
 
 
             }
@@ -371,31 +343,28 @@ public class BigInt implements BigIntInterface {
     }
 
 
-
-
     public void subtract(String one, String two) {
-        boolean [] returnWhichAreNegative = handleNegative( one, two);
+        boolean[] returnWhichAreNegative = handleNegative(one, two);
 
-        if(returnWhichAreNegative[0] == false && returnWhichAreNegative[1] == false) {
+
+        if (returnWhichAreNegative[0] == false && returnWhichAreNegative[1] == false) {
             // If they both come as false. Both Strings one and two are positive.
             // Therefore, we can send it straight to the subtractAlgo Method
-            if (stringValidity(one) && stringValidity(two)) { // this will check that both are valid Strings
+            if (validifyInput(one) && validifyInput(two)) { // this will check that both are valid Strings
                 subtractAlgo(store(one), store(two));
             }
-        }
-        else if(returnWhichAreNegative[0] == true && returnWhichAreNegative[1] == false) {
+        } else if (returnWhichAreNegative[0] == true && returnWhichAreNegative[1] == false) {
 
-            if (stringValidity(one.substring(1)) && stringValidity(two)) {
+            if (validifyInput(one.substring(1)) && validifyInput(two)) {
                 isBigIntNegative = true;
                 addAlgo(one.substring(1), two);
 
 
             }
-        }
-        else if(returnWhichAreNegative[0] == false && returnWhichAreNegative[1] == true){
+        } else if (returnWhichAreNegative[0] == false && returnWhichAreNegative[1] == true) {
 
-            if(stringValidity(one) && stringValidity(two.substring(1))){
-                addAlgo(one,two.substring(1));
+            if (validifyInput(one) && validifyInput(two.substring(1))) {
+                addAlgo(one, two.substring(1));
 
             }
 
@@ -403,200 +372,68 @@ public class BigInt implements BigIntInterface {
         }
     }
 
-    public void subtractAlgo(ArrayList<Integer> one, ArrayList<Integer> two ) {
-        ArrayList<Integer> solution = new ArrayList<>();
+    public void subtractAlgo(ArrayList<Integer> BigIntOne, ArrayList<Integer> BigIntTwo) {
+        ArrayList<Integer> answer = new ArrayList<>();
 
-        boolean borrow = false;
+        boolean takeOne = false;
 
-        if (one.size() == two.size()) {
-            ArrayList<Integer> reversed = reverseList(one);
-            ArrayList<Integer> reversed2 = reverseList(two);
+        if (BigIntOne.size() == BigIntTwo.size()) {
+            ArrayList<Integer> reversedBigIntOne = reverseList(BigIntOne);
+            ArrayList<Integer> reverseBigIntTwo = reverseList(BigIntTwo);
 
-            int forLoopSize = reversed.size();
+            int maxForLoopSize = reversedBigIntOne.size();
 
 
-            for (int i = 0; i < forLoopSize; i++) {
+            for (int i = 0; i < maxForLoopSize; i++) {
                 // 2 2 2
                 // 3 3 0
-                if (reversed.get(i) - reversed2.get(i) >= 0) {
-                    if(borrow == false) {
-                        solution.add(reversed.get(i) - reversed2.get(i));
-                    }
-                    else{
-                        if(reversed.get(i) - reversed2.get(i) != 0) {
-                            solution.add(reversed.get(i) - reversed2.get(i) - 1);
-                            borrow = false;
+                if (reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) >= 0) {
+                    if (takeOne == false) {
+                        answer.add(reversedBigIntOne.get(i) - reverseBigIntTwo.get(i));
+                    } else {
+                        if (reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) != 0) {
+                            answer.add(reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) - 1);
+                            takeOne = false;
+                        } else {
+                            answer.add(reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) - 1 + SUBBORROW);
+                            takeOne = true;
                         }
-                        else{
-                            solution.add(reversed.get(i) - reversed2.get(i) - 1 + SUBBORROW);
-                            borrow = true;
-                        }
-
                     }
-
-                }
-                else{
-
-                    if(borrow == false) {
-                        solution.add(reversed.get(i) - reversed2.get(i) + SUBBORROW);
-                        borrow = true;
+                } else {
+                    if (takeOne == false) {
+                        answer.add(reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) + SUBBORROW);
+                        takeOne = true;
+                    } else {
+                        answer.add(reversedBigIntOne.get(i) - reverseBigIntTwo.get(i) + SUBBORROW - 1);
                     }
-                    else{
-                        solution.add(reversed.get(i) - reversed2.get(i) + SUBBORROW -1 );
-
-
-                    }
-
                 }
             }
-
+        } else if (unequalLengthSolver(BigIntOne.size(), BigIntTwo.size()) == true) {
+            for (int var = BigIntTwo.size(); var < BigIntOne.size(); var++) {
+                BigIntTwo.add(0, 0);
             }
-
-        else if (lengthInequality(one.size(), two.size()) == true) {
-
-                for (int var = two.size(); var < one.size(); var++) {
-                    two.add(0, 0);
-                }
-
-                subtractAlgo(one, two);
-            } else {
-
-                for (int var = one.size(); var < two.size(); var++) {
-                    one.add(0, 0);
-                }
-
-
-                isBigIntNegative = true;
-                subtractAlgo(two, one);
+            subtractAlgo(BigIntOne, BigIntTwo);
+        } else {
+            for (int var = BigIntOne.size(); var < BigIntTwo.size(); var++) {
+                BigIntOne.add(0, 0);
             }
-
-
-            toString(reverseList(solution));
-
+            isBigIntNegative = true;
+            subtractAlgo(BigIntTwo, BigIntOne);
         }
+        toString(reverseList(answer));
 
-
-
-
-/*
-
-
- */
+    }
 
     public static void main(String[] args) {
         BigInt e = new BigInt();
-        e.subtract("2345212341324345234123413241324123413457892349857294385729348579283457893247598234985723498579345345","34212342345872934589023475091323452345234533");
+        e.subtract("111", "222");
+        System.out.println();
+        e.subtract("222", "111");
 
 
     }
+
 }
 
 
-/*
 
-    public BigInt(int rand){
-        Random r = new Random();
-        int arbitraryLength = r.nextInt(350);
-        String arbitraryBigInt = "";
-        for(int i = 0; i<arbitraryLength; i++){
-            arbitraryBigInt = arbitraryBigInt + r.nextInt(10);
-        }
-
-        this.BigIntString = arbitraryBigInt;
-        this.lengthBigInt = arbitraryLength+1;
-        storeContents(BigIntString);
-    }
-
-
- */
-
-    /*
-
-    public void subtractAlgo(ArrayList<Integer<>> one, String two) {
-        if (stringValidity(one) && stringValidity(two)) {
-            ArrayList<Integer> e = reverseList(store(one));
-            ArrayList<Integer> e2 = reverseList(store(two));
-            ArrayList<Integer> temp = new ArrayList<>();
-
-
-            if (lengthEquality(one.length(), two.length())) {
-                int forSize = one.length();
-                boolean takeAway = false;
-                for (int i = 0; i < forSize; i++) {
-                    // [ 1 , 2, 3 , 4 ]
-                    // [ 2 , 2,  2, 2 ]
-
-                    /*
-                       4  3  2  1
-                       2  2  2  2
-
-                       1  1  1  1
-                       9  9  9  9
-                     */
-    /*
-
-                    if (e.get(i) - e2.get(i) < 0) {
-                        if (takeAway == false) {
-                            takeAway = true;
-                            temp.add(Math.abs(e.get(i) - e2.get(i)));
-                        } else if (takeAway == true) {
-                            temp.add(Math.abs(e.get(i) + e2.get(i) - 1));
-
-
-                        }
-                    }
-                    else{
-                        if(takeAway == false) {
-                            temp.add(e.get(i) - e2.get(i));
-                        }
-                        else if(takeAway == true){
-                            temp.add(e.get(i) - e2.get(i) - 1);
-                            takeAway = false;
-
-
-                        }
-
-
-                    }
-                }
-            }
-
-            else if (lengthInequality(one.length(), two.length()) == true) {
-
-                    // A - B where A is greater in length, solution will always be positive.
-                    for (int var = two.length(); var < one.length(); var++) {
-                        e2.add(0);
-                    }
-
-                    subtractAlgo(toStringReturn(reverseList(e)), toStringReturn(reverseList(e2)));
-                } else {
-                    subtractAlgo(toStringReturn(reverseList(e2)), toStringReturn(reverseList(e)));
-                }
-
-                toString(reverseList(temp));
-
-
-            }
-
-
-     */
-
-
-
-
-
-  /*
-
-  COMPLETE
-      A+B
-      A-(-B)
-      -A-B
-      -A- -B
-
-
-
-      TO DO
-      A+-B
-      -A+B
-      A-
-   */
