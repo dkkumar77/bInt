@@ -1,31 +1,60 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+
+/*
+Project Name: Big Integer
+Description: The practical application of arbitrarily long integers. As everyone knows
+the maximum & minimum values that can be used within the Java language is -2,146,483,658
+and it's negative counterpart. However, the purpose of this project is to play around
+with much larger numbers, numbers that can theoretically be infinite in length. Java
+has it's own Big Integer library. That can be used, however, the purpose of this project
+is to understand how one can create their own class that can potentially be used. Some
+of the methods that are used within this class, are similar to Java's built in BigInteger
+class. For Instance, when creating a Big Integer class, what are some potential methods
+that you would want to use?
+The programmer must be able to handle negative & positive Big Integer values. Which means
+that once a String is inputted, the program should distinguish positive and negative values.
+Also, the Big Integer program must be able to add two Big Integers together. In order to accomplish
+this, I stored both Big Integers into an arraylist, while also reversing the arraylist, I would use
+a standard for loop to loop through and add each of the indexes together, while also taking note
+of needing to carry the ONE value if the solution to adding the numbers within a certain index
+surpasses value TEN. Along with this, I also made sure to pad each number with zeroes prior to
+the for loop, to avoid any solutions that come out null, or any arraylists that don't have an
+existing indice to add.
+
+
+
+Author: Deepak Kumar
+Date: July 28th, 2020
+
+
+
+ */
 /*
 
 Coverage:
 
-A+B where A and B are both positive Integers.
-A-B where A and B are both positive Integers.
-
-Need to Do
-
-/test
-
-Handle Negative Cases
-A+B where A or B are negative
 
  */
 public class BigInt implements BigIntInterface {
 
+    // when calling to the constructor, the parameter string value is store
+    // into BigIntString;
     private String BigIntString;
 
+    //var lengthBigInt represents the current length of the BigInteger.
     private int lengthBigInt;
 
+    //ArrayList container for the BigInteger.
     private ArrayList<Integer> list = new ArrayList<>();
 
+    // ADDCAP is a final var that is deemed as the threshold point when it comes to adding
+    // any results that pass ADDCAP, ADDCARRY will be added to the solution in the next
+    // iteration of the for loop.
     private static final int ADDCAP = 10;
     private static final int ADDCARRY = 1;
+
 
     private static final int SUBBORROW = 10;
     private boolean isBigIntNegative;
@@ -274,7 +303,7 @@ public class BigInt implements BigIntInterface {
         } else if (isNeg[0] == true && isNeg[1] == false) {
             // -A + B
             if (negativeStringValidity(BigIntegerOne.substring(1)) && validifyInput(BigIntegerTwo)) {
-                subtract(BigIntegerOne.substring(1), BigIntegerTwo);
+                subtract(BigIntegerTwo, BigIntegerOne.substring(1));
 
 
             }
@@ -427,13 +456,10 @@ public class BigInt implements BigIntInterface {
     }
 
     public static void main(String[] args) {
-        BigInt e = new BigInt();
-        e.subtract("111", "222");
-        System.out.println();
-        e.subtract("222", "111");
 
 
     }
+
 
 }
 
