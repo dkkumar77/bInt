@@ -241,12 +241,12 @@ public class BigInt implements BigIntInterface  {
             }
         } else if (tester[0] == true && tester[1] == true) {
             if (negativeStringValidity(s1.substring(1)) && negativeStringValidity(s2.substring(1))) {
-                subtract(s2.substring(1), s1.substring(1));
+                isBigIntNegative =true;
+                subtractAlgo(s2.substring(1), s1.substring(1));
             }
         } else if (tester[0] == false && tester[1] == true) {
             if(negativeStringValidity(s2.substring(1)) && stringValidity(s1)){
-                isBigIntNegative = true;
-                add(s1, s2.substring(1));
+                addAlgo(s1, s2.substring(1));
             }
         }
         else if(tester[0] == true && tester[1] == false){
@@ -292,7 +292,48 @@ public class BigInt implements BigIntInterface  {
     }
 
 
+
     public void add(String one, String two){
+        /*
+           A + B
+           A + -B
+           -A + B
+           -A + -B
+
+         */
+
+        boolean [] isNeg = handleNegative(one,two);
+
+        if (isNeg[0] == false && isNeg[1] == false) {
+            if (stringValidity(one) & stringValidity(two)) {
+                addAlgo(one,two);
+            }
+        } else if (isNeg[0] == true && isNeg[1] == true) {
+            // -A + -B
+            if (negativeStringValidity(one.substring(1)) && negativeStringValidity(two.substring(1))){
+                isBigIntNegative = true;
+                add(one.substring(1),two.substring(1));
+
+            }
+        } else if (isNeg[0] == false && isNeg[1] == true) {
+            //A + -B
+            if(negativeStringValidity(two.substring(1)) && stringValidity(one)){
+                subtract(one,two.substring(1));
+            }
+        }
+        else if(isNeg[0] == true && isNeg[1] == false){
+            // -A + B
+            if(negativeStringValidity(one.substring(1)) && stringValidity(two)){
+                subtract(one.substring(1),two );
+
+
+            }
+
+        }
+
+
+    }
+    public void addAlgo(String one, String two){
 
         //Takes two Strings, then puts them in an arraylist of integers.
 
@@ -338,12 +379,12 @@ public class BigInt implements BigIntInterface  {
                 }
             }
         }
-        else if(intList1.size() > intList2.size()){
-            additiveLengthSeperation(store(one), store(two));
+        else if(intList1.size() < intList2.size()){
+            additiveLengthSeperation(store(two), store(one));
 
         }
         else{
-            additiveLengthSeperation(store(two), store(one));
+            additiveLengthSeperation(store(one), store(two));
 
         }
             toString(reverseList(solution));
@@ -355,7 +396,7 @@ public class BigInt implements BigIntInterface  {
         for(int i= smaller.size(); i<larger.size(); i++){
             smaller.add(0,0);
         }
-        add(toStringReturn(larger), toStringReturn(smaller));
+        addAlgo(toStringReturn(larger), toStringReturn(smaller));
     }
 
 
@@ -371,17 +412,12 @@ public class BigInt implements BigIntInterface  {
                 // if s1 and s2 are equal in length;
                 // MODEL   --- >   5 4 5 3
                 // MODEL   --- >   1 1 1 1
-                int forSize;
+                int forSize = s1.length();
+
                 boolean borrow = false;
 
 
-                if (s1.length() < s2.length() || s1.length() == s2.length()) {
-                    forSize = s2.length();
-                } else {
-                    forSize = s1.length();
-                }
-
-                for (int i = 0; i < forSize-1; i++) {
+                for (int i = 0; i < forSize; i++) {
                     if (borrow == false) {
                         if (e.get(i) - e2.get(i) >= 0) {
                             temp.add(e.get(i) - e2.get(i));
@@ -398,15 +434,12 @@ public class BigInt implements BigIntInterface  {
                             temp.add(SUBBORROW + e.get(i) - e2.get(i) -1);
                         } else {
                             borrow = false;
-                            temp.add((e.get(i) - e2.get(i) - 1)+10);
+                            temp.add((e.get(i) - e2.get(i) - 1));
 
                         }
 
-
                     }
                 }
-
-
             }
                 /*
 
@@ -440,17 +473,25 @@ public class BigInt implements BigIntInterface  {
 
                         subtractAlgo(toStringReturn(reverseList(e)), toStringReturn(reverseList(e2)));
                     } else {
-                        negate = true;
                         subtractAlgo(toStringReturn(reverseList(e2)), toStringReturn(reverseList(e)));
                     }
-                }
+
+            toString(reverseList(temp));
+
+
+        }
+
+
+
+
             }
 
 
 
     public static void main(String[] args) {
         BigInt e = new BigInt();
-        e.subtract("1","-123");
+
+        e.subtract("1222","-234243");
 
     }
 }
