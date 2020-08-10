@@ -455,6 +455,22 @@ public class BigInt implements BigIntInterface {
 
     }
 
+
+    public void multiply(String one, String two){
+        boolean [] negHandler = handleNegative(one, two);
+
+        if((negHandler[0] == negHandler[1]){
+            if(negativeStringValidity()){
+
+
+
+        }
+
+    }
+    }
+    public void multiplyAlgo(){
+
+    }
     public static void main(String[] args) {
 
 
