@@ -5,7 +5,7 @@ import java.util.Random;
 /*
 Project Name: Big Integer
 Description: The practical application of arbitrarily long integers. As everyone knows
-the maximum & minimum values that can be used within the Java language is -2,146,483,658
+the maximum & minimum values that can be used within the Java language is 2,146,483,658
 and it's negative counterpart. However, the purpose of this project is to play around
 with much larger numbers, numbers that can theoretically be infinite in length. Java
 has it's own Big Integer library. That can be used, however, the purpose of this project
@@ -131,6 +131,12 @@ public class BigInt implements BigIntInterface {
 
     }
 
+    /*
+     Private that takes in two parameters
+     @param : h and k
+     which signifies the length of two big integers.
+
+     */
     private boolean unequalLengthSolver(int h, int k) {
         if (h > k) {
             return true;
@@ -151,7 +157,8 @@ public class BigInt implements BigIntInterface {
 
 
     /*
-        stringValidity takes in a String 'num',
+        stringValidity takes in a parameter
+        @param : String BigInt
         and returns true if every single character
         with in the String matches ASCII values of
         0-9. If number contains anything other, then
@@ -168,6 +175,7 @@ public class BigInt implements BigIntInterface {
     }
 
 
+    //
     private void storeBigInt(String BigInteger) {
         for (int i = 0; i < lengthBigInt; i++) {
             list.add(Integer.parseInt(Character.toString(BigInteger.charAt(i))));
@@ -353,7 +361,12 @@ public class BigInt implements BigIntInterface {
                     handleOneUp = (true);
 
                 }
-            }
+
+                if((i == intList1.size()-1) && handleOneUp==true){
+                    solution.add(1);
+
+            }}
+
         } else if (intList1.size() < intList2.size()) {
             additiveLengthSeperation(store(two), store(one));
 
@@ -455,7 +468,7 @@ public class BigInt implements BigIntInterface {
 
     }
 
-
+  /*
     public void multiply(String one, String two){
         boolean [] negHandler = handleNegative(one, two);
 
@@ -468,10 +481,18 @@ public class BigInt implements BigIntInterface {
 
     }
     }
+
+   */
+
     public void multiplyAlgo(){
+
 
     }
     public static void main(String[] args) {
+        BigInt e = new BigInt();
+
+        e.add("99999","1111");
+
 
 
     }
