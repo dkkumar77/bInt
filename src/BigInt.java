@@ -468,10 +468,13 @@ public class BigInt implements BigIntInterface {
 
     }
 
-  /*
+
     public void multiply(String one, String two){
         boolean [] negHandler = handleNegative(one, two);
 
+        multiplyAlgo(store(one),store(two),1);
+
+        /*
         if((negHandler[0] == negHandler[1]){
             if(negativeStringValidity()){
 
@@ -479,10 +482,11 @@ public class BigInt implements BigIntInterface {
 
         }
 
-    }
+         */
+
     }
 
-   */
+
 
     public void multiplyAlgo(ArrayList<Integer> top, ArrayList<Integer> bottom, Integer lower){
 
@@ -501,24 +505,48 @@ public class BigInt implements BigIntInterface {
 
         for(int i = lower; i > 0 ; i--) { //bottom
             for (int g = top.size(); g > 0; g--) {
+
                 if(needsCarry == false) {
 
-                    if (bottom.get(g) * top.get(i) > 10) {
-                        int value = bottom.get(g) * top.get(i);
-                        solution.add((int) findAtIndex(value,1));
-                        amountCarried = findAtIndex(value,0);
+                    if ((bottom.get(i-1) * top.get(g-1)) > 10) {
+                        int value = bottom.get(i-1) * top.get(g-1);
+                        solution.add(Character.getNumericValue((findAtIndex(value,1))));
+                        amountCarried = Character.getNumericValue(findAtIndex(value,0));
+
                         needsCarry = true;
 
 
                     } else {
-                        solution.add(bottom.get(g)*top.get(i));
+                        solution.add(bottom.get(i-1)*top.get(g-1));
 
                     }
+                }
+                else{
+                    if ((bottom.get(i-1) * top.get(g-1))+amountCarried > 10) {
+                        int value = bottom.get(i-1) * top.get(g-1)+amountCarried;
+                        solution.add(Character.getNumericValue((findAtIndex(value,1))));
+                        amountCarried = Character.getNumericValue(findAtIndex(value,0));
+                        needsCarry = true;
+
+
+                    } else {
+                        solution.add(bottom.get(i-1)*top.get(g-1));
+
+                    }
+
+
                 }
 
 
             }
         }
+        if(!(amountCarried == 0 )){
+            solution.add(amountCarried);
+
+
+        }
+
+        toString(reverseList(solution));
     }
     public Character findAtIndex(int integer, int i){
 
@@ -528,8 +556,7 @@ public class BigInt implements BigIntInterface {
     public static void main(String[] args) {
         BigInt e = new BigInt();
 
-        e.add("99999","1111");
-
+        e.multiply("999999999999","9");
 
 
     }
