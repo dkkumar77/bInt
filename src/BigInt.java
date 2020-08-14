@@ -484,8 +484,45 @@ public class BigInt implements BigIntInterface {
 
    */
 
-    public void multiplyAlgo(){
+    public void multiplyAlgo(ArrayList<Integer> top, ArrayList<Integer> bottom, Integer lower){
 
+        /*
+        MODEL
+           7 9 3
+           0 0 9
+         */
+
+        ArrayList<Integer> solution = new ArrayList<>();
+        boolean needsCarry = false;
+        int amountCarried = 0;
+        int currentInstance = 0;
+
+
+
+        for(int i = lower; i > 0 ; i--) { //bottom
+            for (int g = top.size(); g > 0; g--) {
+                if(needsCarry == false) {
+
+                    if (bottom.get(g) * top.get(i) > 10) {
+                        int value = bottom.get(g) * top.get(i);
+                        solution.add((int) findAtIndex(value,1));
+                        amountCarried = findAtIndex(value,0);
+                        needsCarry = true;
+
+
+                    } else {
+                        solution.add(bottom.get(g)*top.get(i));
+
+                    }
+                }
+
+
+            }
+        }
+    }
+    public Character findAtIndex(int integer, int i){
+
+        return Integer.toString(integer).charAt(i);
 
     }
     public static void main(String[] args) {
