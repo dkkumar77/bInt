@@ -61,6 +61,9 @@ public class BigInt implements BigIntInterface {
 
     private boolean isSolutionCharged = false;
 
+    private BigInt bInt;
+
+
 
     /*
         Creates an object 'BigInt' when passing in a String.
@@ -86,7 +89,6 @@ public class BigInt implements BigIntInterface {
 
             this.BigIntString = BigInteger;
             this.lengthBigInt = BigInteger.length();
-            storeBigInt(BigInteger);
 
         } else {
             /*
@@ -105,6 +107,8 @@ public class BigInt implements BigIntInterface {
     }
 
 
+
+    // EMPTY CONSTRUCTOR WILL EDIT LATER
     public BigInt() {
 
 
@@ -175,14 +179,11 @@ public class BigInt implements BigIntInterface {
     }
 
 
-    //
-    private void storeBigInt(String BigInteger) {
-        for (int i = 0; i < lengthBigInt; i++) {
-            list.add(Integer.parseInt(Character.toString(BigInteger.charAt(i))));
+    /* This method is only accessible within this class, this method is responsible for storing
+    a Big Integer, from a string
 
-        }
-    }
 
+     */
     private ArrayList<Integer> store(String BigInteger) {
         int length = BigInteger.length();
         ArrayList<Integer> temporaryContainer = new ArrayList<>(BigInteger.length());
@@ -321,7 +322,7 @@ public class BigInt implements BigIntInterface {
 
     }
 
-    public void addAlgo(String one, String two) {
+    public ArrayList<Integer> addAlgo(String one, String two) {
 
         //Takes two Strings, then puts them in an arraylist of integers.
 
@@ -375,6 +376,7 @@ public class BigInt implements BigIntInterface {
 
         }
         toString(reverseList(solution));
+        return solution;
 
     }
 
@@ -495,8 +497,9 @@ public class BigInt implements BigIntInterface {
            7 9 3
            0 0 9
          */
-
         ArrayList<Integer> solution = new ArrayList<>();
+
+        ArrayList<Integer> currentSolution = new ArrayList<>();
         boolean needsCarry = false;
         int amountCarried = 0;
         int currentInstance = 0;
@@ -510,56 +513,53 @@ public class BigInt implements BigIntInterface {
 
                     if ((bottom.get(i-1) * top.get(g-1)) > 10) {
                         int value = bottom.get(i-1) * top.get(g-1);
-                        solution.add(Character.getNumericValue((findAtIndex(value,1))));
+                        currentSolution.add(Character.getNumericValue((findAtIndex(value,1))));
                         amountCarried = Character.getNumericValue(findAtIndex(value,0));
 
                         needsCarry = true;
 
 
                     } else {
-                        solution.add(bottom.get(i-1)*top.get(g-1));
+                        currentSolution.add(bottom.get(i-1)*top.get(g-1));
 
                     }
                 }
                 else{
                     if ((bottom.get(i-1) * top.get(g-1))+amountCarried > 10) {
                         int value = bottom.get(i-1) * top.get(g-1)+amountCarried;
-                        solution.add(Character.getNumericValue((findAtIndex(value,1))));
+                        currentSolution.add(Character.getNumericValue((findAtIndex(value,1))));
                         amountCarried = Character.getNumericValue(findAtIndex(value,0));
                         needsCarry = true;
 
 
                     } else {
-                        solution.add(bottom.get(i-1)*top.get(g-1));
+                        currentSolution.add(bottom.get(i-1)*top.get(g-1));
 
                     }
 
 
                 }
+                //solution = addAlgo(toStringReturn(solution), toStringReturn(currentSolution));
+
 
 
             }
+
         }
         if(!(amountCarried == 0 )){
-            solution.add(amountCarried);
+            currentSolution.add(amountCarried);
 
 
         }
 
-        toString(reverseList(solution));
+        toString(reverseList(currentSolution));
     }
     public Character findAtIndex(int integer, int i){
 
         return Integer.toString(integer).charAt(i);
 
     }
-    public static void main(String[] args) {
-        BigInt e = new BigInt();
 
-        e.multiply("999999999999","9");
-
-
-    }
 
 
 }
